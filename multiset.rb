@@ -1,6 +1,7 @@
 # multiset.rb
 
 # https://github.com/maraigue/multiset/blob/master/lib/multiset.rb
+# https://www.rubyguides.com/2018/06/rubys-method-arguments/
 
 ## class MSet. initialized with a hash
 ## hash to store members (keys) and their counts (values)
@@ -31,9 +32,9 @@ class Mset
 
 	attr_accessor :a_hash
 
-	def initialize(**args)
+	def initialize(*list, **args)
 		@a_hash = Hash.new
-
+puts args
 		if (args.count > 0) 
 			args.each {|k, v| 
 				validate!(v)
@@ -65,15 +66,21 @@ class Mset
 	end
 
 
- 	def [](*args)
+ 	def [](*args) #can use key: as an arg
  	  puts 'in brackets'	
+ 	  puts args.class
  		if (args.class == Hash) #a hash
  			puts 'a hash'
  			initialize(args)
- 		elsif (args.count == 1)	#a key
+ 		elsif (args.count == 1 && args.class != Array || args.class == Key)	#a key
  			count_for_key(args[0])
  		else #a set 
+ 			puts 'a set'
+ 			#puts args
 			args.each {|k, v|
+				k.class
+				v.class
+				puts "#{k} and #{v}"
 				if(a_hash.has_key?(k))
 					a_hash[k] += 1
 				else 
@@ -120,9 +127,8 @@ puts n[:bar]
 =end
 #n = Mset[ham:13, ram:22]
 a = Mset.new[1,3,3,3,4,5,5]
-puts a
-#b = Mset.new([3 => 12, 4 => 1])	
-#c = Mset.new
+b = Mset.new({3 => 12, 4 => 1})
+puts b
 #c.add_two(a, b)
 #puts c
 #puts c
