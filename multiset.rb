@@ -37,11 +37,16 @@ class Mset
 				validate!(v)
 				a_hash[k] = v #overwrites duplicate keys, expected hash behavior 
 			}
-			puts 'in here'
 		end
 
 		if (list.count > 0)  
-			a_hash = Hash[*list]
+			list.each {|k, v|
+				if(a_hash.has_key?(k))
+					a_hash[k] += 1
+				else 
+					a_hash[k] = 1
+				end
+			}
 		end
 	end #init
 
@@ -74,22 +79,9 @@ class Mset
  		elsif (args.count == 1)	#a key
  			count_for_key(args[0])
  		else #a set
- 			@a_hash = Hash.new
-
-			args.each {|k, v|
-				if(a_hash.has_key?(k))
-					a_hash[k] += 1
-				else 
-					a_hash[k] = 1
-				end
-			}
+ 			initialize(args)
  		end
- 	end 	
-
-
- 	def +(h_a, h_b)
- 		puts 'its here'
- 	end	
+ 	end 		
 
 
 	def count_for_key(key)
@@ -106,6 +98,7 @@ class Mset
 			a.each {|k, v|
 				b[k] += v
 			}
+			b
 		end
 	end #add two
 
@@ -124,5 +117,6 @@ puts n[:bar]
 =end
 #n = Mset[ham:13, ram:22]
 a = Mset.new[1,3,3,3,4,5,5]
-b = Mset.new(3 => 12, 4 => 1)	
-c = a + b
+b = Mset.new([3 => 12, 4 => 1])	
+c = Mset.add_two(a, b)
+#puts c
