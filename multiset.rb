@@ -1,5 +1,7 @@
 # multiset.rb
 
+# https://github.com/maraigue/multiset/blob/master/lib/multiset.rb
+
 ## class MSet. initialized with a hash
 ## hash to store members (keys) and their counts (values)
 ## ArgumentError if val is less than 1 or not to_i
@@ -29,23 +31,13 @@ class Mset
 
 	attr_accessor :a_hash
 
-	def initialize(*list, **args)
+	def initialize(**args)
 		@a_hash = Hash.new
 
 		if (args.count > 0) 
 			args.each {|k, v| 
 				validate!(v)
 				a_hash[k] = v #overwrites duplicate keys, expected hash behavior 
-			}
-		end
-
-		if (list.count > 0)  
-			list.each {|k, v|
-				if(a_hash.has_key?(k))
-					a_hash[k] += 1
-				else 
-					a_hash[k] = 1
-				end
 			}
 		end
 	end #init
@@ -68,18 +60,27 @@ class Mset
 
 
 	def self.[](*list)	
+		puts 'in self'
     initialize(list)
 	end
 
 
  	def [](*args)
+ 	  puts 'in brackets'	
  		if (args.class == Hash) #a hash
  			puts 'a hash'
  			initialize(args)
  		elsif (args.count == 1)	#a key
  			count_for_key(args[0])
- 		else #a set
- 			initialize(args)
+ 		else #a set 
+			args.each {|k, v|
+				if(a_hash.has_key?(k))
+					a_hash[k] += 1
+				else 
+					a_hash[k] = 1
+				end
+			}
+			a_hash
  		end
  	end 		
 
@@ -93,12 +94,14 @@ class Mset
 
 
 	def add_two(a, b)
-		puts 'yeah'
+		puts a.class
+		puts b.class
 		if (a.class == Hash && b.class == Hash)
+			puts 'two hashes'
 			a.each {|k, v|
 				b[k] += v
 			}
-			b
+			puts b
 		end
 	end #add two
 
@@ -117,6 +120,9 @@ puts n[:bar]
 =end
 #n = Mset[ham:13, ram:22]
 a = Mset.new[1,3,3,3,4,5,5]
-b = Mset.new([3 => 12, 4 => 1])	
-c = Mset.add_two(a, b)
+puts a
+#b = Mset.new([3 => 12, 4 => 1])	
+#c = Mset.new
+#c.add_two(a, b)
+#puts c
 #puts c
