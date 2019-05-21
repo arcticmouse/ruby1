@@ -3,11 +3,15 @@
 # questions : 
 # the each for enumerate
 # what is yield
+# better to use super in initialize?
+# add Hash methods to my class (would super have done that)?
 
 
 # https://github.com/maraigue/multiset/blob/master/lib/multiset.rb
 # https://www.rubyguides.com/2018/06/rubys-method-arguments/
 # https://medium.com/@ethan.reid.roberts/rubys-anonymous-eigenclass-putting-the-ei-in-team-ebc1e8f8d668
+# https://medium.com/@amliving/how-i-think-about-rubys-enumerable-38219350696
+# https://medium.com/@amliving/recreating-rubys-enumerable-7a8b898b8482
 
 ## class MSet. initialized with a hash
 ## hash to store members (keys) and their counts (values)
@@ -32,7 +36,8 @@
 puts "hello"
 
 
-class Mset
+class Mset < Hash
+
 	include Enumerable
 	attr_accessor :a_hash
 
@@ -54,18 +59,27 @@ class Mset
 
 			if(args.class == Array)
 					puts args.count
-					if(args.count == 1)
-						puts "it is one"
-					end
-
+					#if(args.count == 1)
+					#	puts "it is one"
+					#end
+					args.each {|k|
+						puts "k is #{k}"
+						if(a_hash.has_key?(k))
+							a_hash[k] += 1
+						else 
+							a_hash[k] = 1
+						end
+					}
+					puts a_hash
 			end
 
 		end #if defined
 	end #initialize
 
 
-	def each
-		yield a_hash
+	def each(&block)
+		@a_hash.each(&block)
+		self
 	end # each
 
 
@@ -105,11 +119,23 @@ class Mset
 
 	def count_for_key(key)
 		puts "count for key"
-		if(a_hash.has_key?(key.to_sym))
-			a_hash[key.to_sym]
+		if(a_hash.has_key?(key))
+			a_hash[key]
 		else nil
 		end
 	end #count for key
+
+
+	def do_the_addition(long, short)
+		short.each{|k, v|
+			if(long.has_key?(k))
+				long[k] += v
+			else 
+				long[k] += 1
+			end	
+		}
+		long
+	end #do_the_addition
 
 
 	def self.add_two(a, b)
@@ -125,9 +151,17 @@ class Mset
 			b = new(b)
 		end
 
-		puts a.methods.sort
+		puts "merging these two"
+		puts a.count
+		#puts a.class
+		puts b.count
+		#puts b.class
 
-		a.merge(b) {|k, a_val, b_val| a_val + b_val}
+		if(a.count > b.count)
+			self.class.do_the_addition(a, b)
+		else 
+			self.class.do_the_addition(b, a)
+		end	
 
 	end #add two
 
@@ -150,4 +184,3 @@ a = [1,3,3,3,4,5,5]
 b = Mset.new({3 => 12, 4 => 1})
 c = Mset.add_two(a, b)
 puts c
-#puts c
