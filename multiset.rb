@@ -5,6 +5,7 @@
 # what is yield
 # better to use super in initialize?
 # add Hash methods to my class (would super have done that)?
+# add_two cant get value via key 
 
 
 # https://github.com/maraigue/multiset/blob/master/lib/multiset.rb
@@ -20,7 +21,7 @@
 ## be initialized with _any_ Enumerable, in which case it traverses the Enumerable, adding 1 for every member it finds.
 ## besides Mset.new, you can construct a multiset with the [] Mset class method. ; m = Mset[ham:13, ram:22]
 # add two multisets
-# to_h : return a new hash with the same content as the MSet
+## to_h : return a new hash with the same content as the MSet
 # to_a : create element for each element of Mset times it's count
 # to_set : returns a new set whose members are the members of the Mset. The count information isn't preserved in any way, of course, so if you convert it back to a multiset you only get the same thing if all the multiset's counts happened to be 1.
 # equality method == ; Mset.new(m.to_a) == m is true
@@ -46,6 +47,7 @@ class Mset < Hash
 		@a_hash = Hash.new
 
 		if(defined?(args))
+			puts "in init"
 			puts "args is #{args}"
 			puts args.class
 
@@ -109,7 +111,7 @@ class Mset < Hash
 
 	def [](key)
 		puts "in brackets"
-
+		
 		if(key.is_a?String)
 			key = key.to_sym
 		elsif(key.is_a?Numeric)
@@ -119,22 +121,25 @@ class Mset < Hash
 		puts key
 		puts key.class
 		puts a_hash
+		puts a_hash[key]
 
 		if(a_hash.has_key?(key))
 			puts a_hash[key]
 			a_hash[key]
 		else 
 			puts 'it is nil'
+			puts a_hash
+			puts key
 			nil
 		end
 	end #[]
 
 
 	def self.add_two(a, b)
-		puts a.class
-		puts a
-		puts b.class
-		puts b
+		#puts a.class
+		#puts a
+		#puts b.class
+		#puts b
 
 		if(a.class != Mset)
 			a = new(a)
@@ -157,18 +162,40 @@ class Mset < Hash
 			short = a
 		end	
 =end
+	puts "b three is  #{b[3]}"
+	puts b[3]
+
 		a.each{|k, v|
 			puts "#{k} and #{v}"
 			if(b.has_key?(k))
+				puts "it has the key"
 				b[k] += v
-				puts 'bk is ' + b[k]
 			else 
+				puts "it does not have the key"
 				b[k] = 1
-				puts b[k]
 			end	
 		}
 
+		return a
 	end #add two
+
+
+	def to_h
+		puts 'making a hash'
+		puts a_hash.class
+		a_hash
+	end #to_h	
+
+
+	def to_a
+		puts "making things crazy"
+		a_hash.each{ |k, v|
+			puts "#{k} and #{v}"
+			puts a_hash[k]
+			
+		}
+	end #to_a
+
 
 end #class Mset
 
@@ -176,16 +203,20 @@ end #class Mset
 
 h = {a:23, b:2, c: 9}
 m = Mset.new(h)
-puts m[:a]
-puts m[:foo]
-puts m.count_for_key('3')
-puts m.count_for_key('b')
-n = Mset.new(foo:12, bar:18)
-puts n[:bar] 
+#puts m[:a]
+#puts m[:foo]
+#n = Mset.new(foo:12, bar:18)
+#puts n[:bar] 
 
-q = Mset[ham:13, ram:22]
+#q = Mset[ham:13, ram:22]
 
-a = [1,3,3,3,4,5,5]
-b = Mset.new({3 => 12, 4 => 1})
-c = Mset.add_two(a, b)
-puts c
+#a = [1,3,3,3,4,5,5]
+#b = Mset.new({3 => 12, 4 => 1})
+#c = Mset.add_two(a, b)
+#puts c
+puts m.class
+a_new_hash = m.to_h
+puts a_new_hash.class
+puts a_new_hash
+
+Mset.new({b:3,x:2}).to_a 
