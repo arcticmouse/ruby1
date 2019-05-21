@@ -1,15 +1,20 @@
 # multiset.rb
 
+# questions : 
+# the each for enumerate
+# what is yield
+
+
 # https://github.com/maraigue/multiset/blob/master/lib/multiset.rb
 # https://www.rubyguides.com/2018/06/rubys-method-arguments/
 # https://medium.com/@ethan.reid.roberts/rubys-anonymous-eigenclass-putting-the-ei-in-team-ebc1e8f8d668
 
-# class MSet. initialized with a hash
-# hash to store members (keys) and their counts (values)
-# ArgumentError if val is less than 1 or not to_i
-# returns count for a given member OR nil if member not exists
-# be initialized with _any_ Enumerable, in which case it traverses the Enumerable, adding 1 for every member it finds.
-# besides Mset.new, you can construct a multiset with the [] Mset class method. ; m = Mset[ham:13, ram:22]
+## class MSet. initialized with a hash
+## hash to store members (keys) and their counts (values)
+## ArgumentError if val is less than 1 or not to_i
+## returns count for a given member OR nil if member not exists
+## be initialized with _any_ Enumerable, in which case it traverses the Enumerable, adding 1 for every member it finds.
+## besides Mset.new, you can construct a multiset with the [] Mset class method. ; m = Mset[ham:13, ram:22]
 # add two multisets
 # to_h : return a new hash with the same content as the MSet
 # to_a : create element for each element of Mset times it's count
@@ -32,22 +37,19 @@ class Mset
 	attr_accessor :a_hash
 
 
-	def hash_to_hash(brown) 
-		brown.each {|k, v| 
-			validate!(v)
-			a_hash[k] = v #overwrites duplicate keys, expected hash behavior 
-		}
-	end
-
-
 	def initialize(args)
 		@a_hash = Hash.new
 
 		if (defined?(args))
 			puts "args is #{args}"
 			puts args.class
+
 			if(args.class == Hash)
-				hash_to_hash(args)
+				args.each {|k, v| 
+					validate!(v)
+					a_hash[k] = v #overwrites duplicate keys, expected hash behavior 
+				}
+				puts a_hash
 			end
 
 			if(args.class == Array)
@@ -55,6 +57,7 @@ class Mset
 					if(args.count == 1)
 						puts "it is one"
 					end
+
 			end
 
 		end #if defined
@@ -63,7 +66,7 @@ class Mset
 
 	def each
 		yield a_hash
-	end
+	end # each
 
 
 	def validate!(value)
@@ -85,9 +88,9 @@ class Mset
 		puts @a_hash
 		if (defined?(args) && args.count > 0)
 			puts "args is #{args}"
-			self.hash_to_hash(args)
+			self.new(args)
 		end
-	end
+	end # self.[]
 
 
 	def [](*list)
@@ -97,9 +100,7 @@ class Mset
 		if(list.count == 1 && list.class == Array)
 			count_for_key(list[0])
 		end
-
-		#initialize(list)
-	end
+	end #[]
 
 
 	def count_for_key(key)
@@ -109,6 +110,25 @@ class Mset
 		else nil
 		end
 	end #count for key
+
+
+	def self.add_two(a, b)
+		# booleans, symbols, numbers, strings
+		# arrays
+		#hashs
+		puts a.class
+		puts a
+		puts b.class
+		puts b
+		
+		if (a.class == Hash && b.class == Hash)
+			puts 'two hashes'
+			a.each {|k, v|
+				b[k] += v
+			}
+			
+		end
+	end #add two
 
 end #class Mset
 
@@ -124,11 +144,9 @@ n = Mset.new(foo:12, bar:18)
 puts n[:bar] 
 
 q = Mset[ham:13, ram:22]
-#q = Mset.new[ham:13, ram:22]
-puts q
-#a = [1,3,3,3,4,5,5]
-#b = Mset.new({3 => 12, 4 => 1})
-#puts b
-#c.add_two(a, b)
-#puts c
+
+a = [1,3,3,3,4,5,5]
+b = Mset.new({3 => 12, 4 => 1})
+c = Mset.add_two(a, b)
+puts c
 #puts c
