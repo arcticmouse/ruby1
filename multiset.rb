@@ -118,24 +118,16 @@ class Mset
 		puts b.class
 		puts b
 
-		# Hash
-		if (a.class == Hash && b.class == Hash) 
-			puts 'two hashes'
-			a.each {|k, v|
-				b[k] += v
-			}
-		# Array	
-		elsif(a.class == Array && b.class == Hash) 
-			
-    elsif(b.class == Array && a.class == Hash)
-    elsif(b.class == Array && a.class == Array)
-
-
-		# booleans (TrueClass / FalseClass), Symbol, numbers (x.is_a?Numeric), strings(x.is_a?String)
-		#if( a.class == TrueClass || a.class== FalseClass || a.class == Symbol || a.is_a?Numeric || a.is_a?String )
-
+		if(a.class != Mset)
+			a = new(a)
 		end 	
-		
+		if(b.class != Mset)
+			b = new(b)
+		end
+
+		puts a.methods.sort
+
+		a.merge(b) {|k, a_val, b_val| a_val + b_val}
 
 	end #add two
 
