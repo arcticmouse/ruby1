@@ -107,35 +107,27 @@ class Mset < Hash
 	end # self.[]
 
 
-	def [](*list)
+	def [](key)
 		puts "in brackets"
-		puts list.class
-		puts list.count
-		if(list.count == 1 && list.class == Array)
-			count_for_key(list[0])
+
+		if(key.is_a?String)
+			key = key.to_sym
+		elsif(key.is_a?Numeric)
+			key = key.to_s.to_sym
+		end
+
+		puts key
+		puts key.class
+		puts a_hash
+
+		if(a_hash.has_key?(key))
+			puts a_hash[key]
+			a_hash[key]
+		else 
+			puts 'it is nil'
+			nil
 		end
 	end #[]
-
-
-	def count_for_key(key)
-		puts "count for key"
-		if(a_hash.has_key?(key))
-			a_hash[key]
-		else nil
-		end
-	end #count for key
-
-
-	def do_the_addition(long, short)
-		short.each{|k, v|
-			if(long.has_key?(k))
-				long[k] += v
-			else 
-				long[k] += 1
-			end	
-		}
-		long
-	end #do_the_addition
 
 
 	def self.add_two(a, b)
@@ -153,15 +145,28 @@ class Mset < Hash
 
 		puts "merging these two"
 		puts a.count
-		#puts a.class
+		puts a.class
 		puts b.count
-		#puts b.class
-
+		puts b.class
+=begin
 		if(a.count > b.count)
-			self.class.do_the_addition(a, b)
+			long = a
+			short = b
 		else 
-			self.class.do_the_addition(b, a)
+			long = b
+			short = a
 		end	
+=end
+		a.each{|k, v|
+			puts "#{k} and #{v}"
+			if(b.has_key?(k))
+				b[k] += v
+				puts 'bk is ' + b[k]
+			else 
+				b[k] = 1
+				puts b[k]
+			end	
+		}
 
 	end #add two
 
