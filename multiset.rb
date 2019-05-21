@@ -40,7 +40,7 @@ class Mset
 	def initialize(args)
 		@a_hash = Hash.new
 
-		if (defined?(args))
+		if(defined?(args))
 			puts "args is #{args}"
 			puts args.class
 
@@ -70,11 +70,11 @@ class Mset
 
 
 	def validate!(value)
-		if (value < 1) 
+		if(value < 1) 
 				ArgumentError.new("All values in hash need to be positive")
 		end
 
-		if (!value.respond_to?(:to_i)) 
+		if(!value.respond_to?(:to_i)) 
 			ArgumentError.new("All values in hash need to be integers")
 		end
 	end #validate
@@ -86,7 +86,7 @@ class Mset
 		puts args.count
 		puts "a hash is"
 		puts @a_hash
-		if (defined?(args) && args.count > 0)
+		if(defined?(args) && args.count > 0)
 			puts "args is #{args}"
 			self.new(args)
 		end
@@ -113,21 +113,30 @@ class Mset
 
 
 	def self.add_two(a, b)
-		# booleans, symbols, numbers, strings
-		# arrays
-		#hashs
 		puts a.class
 		puts a
 		puts b.class
 		puts b
-		
-		if (a.class == Hash && b.class == Hash)
+
+		# Hash
+		if (a.class == Hash && b.class == Hash) 
 			puts 'two hashes'
 			a.each {|k, v|
 				b[k] += v
 			}
+		# Array	
+		elsif(a.class == Array && b.class == Hash) 
 			
-		end
+    elsif(b.class == Array && a.class == Hash)
+    elsif(b.class == Array && a.class == Array)
+
+
+		# booleans (TrueClass / FalseClass), Symbol, numbers (x.is_a?Numeric), strings(x.is_a?String)
+		#if( a.class == TrueClass || a.class== FalseClass || a.class == Symbol || a.is_a?Numeric || a.is_a?String )
+
+		end 	
+		
+
 	end #add two
 
 end #class Mset
