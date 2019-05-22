@@ -26,12 +26,12 @@
 # add two multisets
 ## to_h : return a new hash with the same content as the MSet
 ## to_a : create element for each element of Mset times it's count
-# to_set : returns a new set whose members are the members of the Mset. The count information isn't preserved in any way, of course, so if you convert it back to a multiset you only get the same thing if all the multiset's counts happened to be 1.
+## to_set : returns a new set whose members are the members of the Mset. The count information isn't preserved in any way, of course, so if you convert it back to a multiset you only get the same thing if all the multiset's counts happened to be 1.
 ## equality method == ; Mset.new(m.to_a) == m is true
 ## If a is a sortable list (lists may or may not be sortable depending on whether their membership has an inter-compatible <=>):
 ## an each method and Multiset should include Enumerable.
 ## The member? and include? methods should return a boolean to indicate membership
-# delete method should remove a member and return the value the member had
+## delete method should remove a member and return the value the member had
 # Assignment should work; assignment to zero is valid and is the equivalent of deleting. Assignment to a negative number or something without a to_i should raise an ArgumentError.
 # size and count should work and return the sum of the values of the multiset.
 
@@ -41,7 +41,7 @@ puts "hello"
 
 
 class Mset < Hash
-
+	require 'set'
 	include Enumerable
 	attr_accessor :a_hash
 
@@ -60,9 +60,10 @@ class Mset < Hash
 					a_hash[k] = v #overwrites duplicate keys, expected hash behavior 
 				}
 				puts a_hash
+				a_hash
 			end
 
-			if(args.class == Array)
+			if(args.class == Array || args.class == Set)
 					puts args.count
 					#if(args.count == 1)
 					#	puts "it is one"
@@ -76,6 +77,7 @@ class Mset < Hash
 						end
 					}
 					puts a_hash
+					a_hash
 			end
 
 		end #if defined
@@ -239,13 +241,23 @@ class Mset < Hash
 	end
 
 
+	def to_set()
+		puts "in set"
+		set = Set.new
+		a_hash.keys.each{ |i| set.add(i) }
+		set
+	end	
+
+
 	def delete(arg)
 		puts "in delete"
 		if(arg.class == Symbol || arg.count == 1)
 			if(a_hash.has_key?(arg))
-				a_hash.reject{ |k, v| k == arg}
+				#a_hash.delete_if{ |k, v| k == arg }
+				a_hash.delete(arg)
 				a_hash
-			else nil
+			else 
+				nil
 			end
 		else nil
 		end	
@@ -268,8 +280,8 @@ end #class Mset
 
 
 
-h = {b:2, q:32, c: 9, a:23}
-m = Mset.new(h)
+#h = {b:2, q:32, c: 9, a:23}
+#m = Mset.new(h)
 =begin
 puts m[:a]
 puts m[:foo]
@@ -300,6 +312,21 @@ puts m.include?(:b)
 puts m.member?(:c)
 puts m.include(:foo)
 =end
-puts m.delete(:c)
-puts m.include?(:c)
-puts m.delete(:c)
+
+m = Mset.new({b:2, c:1})
+#https://stackoverflow.com/questions/47039716/whats-does-i-or-i-do-in-ruby 
+#makes a set of symbols
+#s = m.to_set
+#puts s
+#n = Mset.new(s)
+
+#puts m.delete(:c)
+#puts m.include?(:c)
+#puts m.delete(:c)
+
+m[:c] = 5
+#m[:d] == 8.9
+#puts m[:d] # --> 8
+#m[:d] = 0
+#puts m[:d] # --> nil
+#m.member?(:d) # --> false
