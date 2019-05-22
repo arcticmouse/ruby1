@@ -22,7 +22,7 @@
 ## besides Mset.new, you can construct a multiset with the [] Mset class method. ; m = Mset[ham:13, ram:22]
 # add two multisets
 ## to_h : return a new hash with the same content as the MSet
-# to_a : create element for each element of Mset times it's count
+## to_a : create element for each element of Mset times it's count
 # to_set : returns a new set whose members are the members of the Mset. The count information isn't preserved in any way, of course, so if you convert it back to a multiset you only get the same thing if all the multiset's counts happened to be 1.
 # equality method == ; Mset.new(m.to_a) == m is true
 # If a is a sortable list (lists may or may not be sortable depending on whether their membership has an inter-compatible <=>):
@@ -188,18 +188,20 @@ class Mset < Hash
 
 
 	def to_a
-		puts "making things crazy"
+		puts "to array with keys same amount as their values"
 
 		arr = Array.new
-		q = 0
 
 		a_hash.each_with_index{ |(k, v), i|
-			puts "#{i} : #{k} and #{v}"
-			#for q in v
-			#	arr.push(v)		
-			#end
+			q = 0
+
+			while q < v do
+				arr.push(k.to_sym)
+				q += 1
+			end
 		}
-		puts arr
+
+		arr
 	end #to_a
 
 
