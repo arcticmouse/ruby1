@@ -189,11 +189,17 @@ class Mset < Hash
 
 	def to_a
 		puts "making things crazy"
-		a_hash.each{ |k, v|
-			puts "#{k} and #{v}"
-			puts a_hash[k]
-			
+
+		arr = Array.new
+		q = 0
+
+		a_hash.each_with_index{ |(k, v), i|
+			puts "#{i} : #{k} and #{v}"
+			#for q in v
+			#	arr.push(v)		
+			#end
 		}
+		puts arr
 	end #to_a
 
 
