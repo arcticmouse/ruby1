@@ -129,10 +129,10 @@ class Mset < Hash
 		#puts a_hash[key]
 
 		if(a_hash.has_key?(key))
-			#puts a_hash[key]
+			puts a_hash[key]
 			a_hash[key]
 		else 
-			#puts 'it is nil'
+			puts 'it is nil'
 			#puts a_hash
 			#puts key
 			nil
@@ -215,7 +215,7 @@ class Mset < Hash
 		puts "in sort"
 		#a_hash.sort_by {|k, v| k}
 		a_hash.sort
-	end	
+	end	#sort
 
 
 	def include?(arg)
@@ -239,14 +239,14 @@ class Mset < Hash
 	def member(arg)
 		member?(arg)
 	end
-
+	#include/memeber query functions
 
 	def to_set()
 		puts "in set"
 		set = Set.new
 		a_hash.keys.each{ |i| set.add(i) }
 		set
-	end	
+	end	#to_set
 
 
 	def delete(arg)
@@ -261,7 +261,35 @@ class Mset < Hash
 			end
 		else nil
 		end	
-	end	
+	end	#delete
+
+	#https://stackoverflow.com/questions/48603806/ruby-methods-for-element-reference-and-assignment
+	def []=(a, b)
+		puts "in equal"
+		validate!(b)
+		puts a.class
+		puts b.class
+		if(a_hash.has_key?(a))
+			if (b == 0)
+				delete(a)
+			else
+				#a_hash[a] = b
+				nil
+			end
+		end
+	end # assignment
+
+
+	def size
+		puts "get size"
+		counter = 0
+		a_hash.each{ |k, v| counter += v}
+		counter
+	end #size
+
+	def count
+		size()
+	end #count
 
 
 	# https://stackoverflow.com/questions/1931604/whats-the-right-way-to-implement-equality-in-ruby
@@ -280,11 +308,12 @@ end #class Mset
 
 
 
-#h = {b:2, q:32, c: 9, a:23}
-#m = Mset.new(h)
+h = {b:2, q:32, c: 9, a:23}
+m = Mset.new(h)
 =begin
 puts m[:a]
 puts m[:foo]
+
 n = Mset.new(foo:12, bar:18)
 puts n[:bar] 
 
@@ -313,7 +342,7 @@ puts m.member?(:c)
 puts m.include(:foo)
 =end
 
-m = Mset.new({b:2, c:1})
+#m = Mset.new({b:2, c:1, d:8})
 #https://stackoverflow.com/questions/47039716/whats-does-i-or-i-do-in-ruby 
 #makes a set of symbols
 #s = m.to_set
@@ -324,9 +353,11 @@ m = Mset.new({b:2, c:1})
 #puts m.include?(:c)
 #puts m.delete(:c)
 
-m[:c] = 5
+#m[:c] = 5
 #m[:d] == 8.9
 #puts m[:d] # --> 8
 #m[:d] = 0
 #puts m[:d] # --> nil
 #m.member?(:d) # --> false
+ 
+ m.count
