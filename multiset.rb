@@ -6,6 +6,8 @@
 # better to use super in initialize?
 # add Hash methods to my class (would super have done that)?
 # add_two cant get value via key 
+# verify to_h works because of Mset < Hash
+# why doesnt a_hash.sort_by {|k, v| k} work
 
 
 # https://github.com/maraigue/multiset/blob/master/lib/multiset.rb
@@ -13,6 +15,7 @@
 # https://medium.com/@ethan.reid.roberts/rubys-anonymous-eigenclass-putting-the-ei-in-team-ebc1e8f8d668
 # https://medium.com/@amliving/how-i-think-about-rubys-enumerable-38219350696
 # https://medium.com/@amliving/recreating-rubys-enumerable-7a8b898b8482
+# https://stackoverflow.com/questions/4370960/what-is-attr-accessor-in-ruby
 
 ## class MSet. initialized with a hash
 ## hash to store members (keys) and their counts (values)
@@ -24,10 +27,10 @@
 ## to_h : return a new hash with the same content as the MSet
 ## to_a : create element for each element of Mset times it's count
 # to_set : returns a new set whose members are the members of the Mset. The count information isn't preserved in any way, of course, so if you convert it back to a multiset you only get the same thing if all the multiset's counts happened to be 1.
-# equality method == ; Mset.new(m.to_a) == m is true
-# If a is a sortable list (lists may or may not be sortable depending on whether their membership has an inter-compatible <=>):
-# an each method and Multiset should include Enumerable.
-# The member? and include? methods should return a boolean to indicate membership
+## equality method == ; Mset.new(m.to_a) == m is true
+## If a is a sortable list (lists may or may not be sortable depending on whether their membership has an inter-compatible <=>):
+## an each method and Multiset should include Enumerable.
+## The member? and include? methods should return a boolean to indicate membership
 # delete method should remove a member and return the value the member had
 # Assignment should work; assignment to zero is valid and is the equivalent of deleting. Assignment to a negative number or something without a to_i should raise an ArgumentError.
 # size and count should work and return the sum of the values of the multiset.
@@ -48,8 +51,8 @@ class Mset < Hash
 
 		if(defined?(args))
 			puts "in init"
-			puts "args is #{args}"
-			puts args.class
+			#puts "args is #{args}"
+			#puts args.class
 
 			if(args.class == Hash)
 				args.each {|k, v| 
@@ -65,7 +68,7 @@ class Mset < Hash
 					#	puts "it is one"
 					#end
 					args.each {|k|
-						puts "k is #{k}"
+						#puts "k is #{k}"
 						if(a_hash.has_key?(k))
 							a_hash[k] += 1
 						else 
@@ -78,7 +81,7 @@ class Mset < Hash
 		end #if defined
 	end #initialize
 
-
+	#https://www.tutorialspoint.com/ruby/ruby_blocks.htm
 	def each(&block)
 		@a_hash.each(&block)
 		self
@@ -98,12 +101,12 @@ class Mset < Hash
 
 	def self.[](args)
 		puts "in self"
-		puts args.class
-		puts args.count
-		puts "a hash is"
-		puts @a_hash
+		#puts args.class
+		#puts args.count
+		#puts "a hash is"
+		#puts @a_hash
 		if(defined?(args) && args.count > 0)
-			puts "args is #{args}"
+			#puts "args is #{args}"
 			self.new(args)
 		end
 	end # self.[]
@@ -118,18 +121,18 @@ class Mset < Hash
 			key = key.to_s.to_sym
 		end
 
-		puts key
-		puts key.class
-		puts a_hash
-		puts a_hash[key]
+		#puts key
+		#puts key.class
+		#puts a_hash
+		#puts a_hash[key]
 
 		if(a_hash.has_key?(key))
-			puts a_hash[key]
+			#puts a_hash[key]
 			a_hash[key]
 		else 
-			puts 'it is nil'
-			puts a_hash
-			puts key
+			#puts 'it is nil'
+			#puts a_hash
+			#puts key
 			nil
 		end
 	end #[]
@@ -182,8 +185,8 @@ class Mset < Hash
 
 	def to_h
 		puts 'making a hash'
-		puts a_hash.class
-		a_hash
+		#puts a_hash.class
+		a_hash 
 	end #to_h	
 
 
@@ -194,37 +197,93 @@ class Mset < Hash
 
 		a_hash.each_with_index{ |(k, v), i|
 			q = 0
-
+			validate!(v)
 			while q < v do
 				arr.push(k.to_sym)
 				q += 1
 			end
 		}
-
+		puts arr.class
 		arr
 	end #to_a
 
+
+	def sort
+		#nothing defined so sorting by key
+		puts "in sort"
+		#a_hash.sort_by {|k, v| k}
+		a_hash.sort
+	end	
+
+
+	def include?(arg)
+		puts "in include"
+		puts arg
+		puts a_hash
+		if(arg.class == Symbol || arg.count == 1)
+			a_hash.has_key?(arg) || a_hash.has_key?(arg.to_sym)
+		else false
+		end	
+	end
+
+	def include(arg)
+		include?(arg)
+	end	
+
+	def member?(arg)
+		include?(arg)
+	end	
+
+	def member(arg)
+		member?(arg)
+	end
+
+
+	# https://stackoverflow.com/questions/1931604/whats-the-right-way-to-implement-equality-in-ruby
+	def == (other)
+		other.class == self.class && other.state == state
+	end
+
+
+	protected
+
+  def state
+    self.instance_variables.map { |variable| self.instance_variable_get variable }
+  end
 
 end #class Mset
 
 
 
-h = {a:23, b:2, c: 9}
+h = {b:2, q:32, c: 9, a:23}
 m = Mset.new(h)
-#puts m[:a]
-#puts m[:foo]
-#n = Mset.new(foo:12, bar:18)
-#puts n[:bar] 
+=begin
+puts m[:a]
+puts m[:foo]
+n = Mset.new(foo:12, bar:18)
+puts n[:bar] 
 
-#q = Mset[ham:13, ram:22]
+q = Mset[ham:13, ram:22]
 
 #a = [1,3,3,3,4,5,5]
 #b = Mset.new({3 => 12, 4 => 1})
 #c = Mset.add_two(a, b)
 #puts c
+
+=begin
 puts m.class
 a_new_hash = m.to_h
 puts a_new_hash.class
 puts a_new_hash
 
 Mset.new({b:3,x:2}).to_a 
+
+puts Mset.new(m.to_a) == m
+puts Mset.new(m.to_h) == m
+puts Mset.new(h).to_h == h
+puts Mset.new(m.to_a).sort == m.sort
+
+puts m.include?(:b)
+puts m.member?(:c)
+puts m.include(:foo)
+=end
