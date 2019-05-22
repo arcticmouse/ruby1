@@ -239,6 +239,19 @@ class Mset < Hash
 	end
 
 
+	def delete(arg)
+		puts "in delete"
+		if(arg.class == Symbol || arg.count == 1)
+			if(a_hash.has_key?(arg))
+				a_hash.reject{ |k, v| k == arg}
+				a_hash
+			else nil
+			end
+		else nil
+		end	
+	end	
+
+
 	# https://stackoverflow.com/questions/1931604/whats-the-right-way-to-implement-equality-in-ruby
 	def == (other)
 		other.class == self.class && other.state == state
@@ -287,3 +300,6 @@ puts m.include?(:b)
 puts m.member?(:c)
 puts m.include(:foo)
 =end
+puts m.delete(:c)
+puts m.include?(:c)
+puts m.delete(:c)
